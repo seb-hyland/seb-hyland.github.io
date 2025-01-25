@@ -39,8 +39,8 @@ pub fn Home() -> Element {
             id: "hero",
             div {
                 h1 { "Sebastian Hyland" }
-                h2 { "Biomedical engineer by day, programmer by night" }
-                p { "Navigate this site through the command prompt. Type " u { "help" } " to get started!"}
+                h2 { "Biomedical engineer with interests in bioinformatics, embedded systems, distributed compute, and optimization" }
+                p { "This site is currently under construction."}
             }
         }
     }

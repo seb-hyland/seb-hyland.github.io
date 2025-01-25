@@ -1,0 +1,6 @@
+#!/bin/sh
+
+dx bundle --release
+rm -r docs
+mkdir docs
+mv target/dx/site/release/web/public/* docs/
