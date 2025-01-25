@@ -39,7 +39,14 @@ pub fn Home() -> Element {
             id: "hero",
             div {
                 h1 { "Sebastian Hyland" }
-                h2 { "Biomedical engineer with interests in bioinformatics, embedded systems, distributed compute, and optimization" }
+                h2 { "UBC School of Biomedical Engineering" }
+                p { "Interests:" }
+                ul {
+                    li { "Bioinformatics" }
+                    li { "Embedded systems/firmware" }
+                    li { "Distributed compute" }
+                    li { "Optimization" }
+                }
                 p { "This site is currently under construction."}
             }
         }
