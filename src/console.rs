@@ -31,8 +31,8 @@ const EXTERN_PAGES: LazyLock<HashMap<&'static str, &'static str>> = LazyLock::ne
 #[component]
 pub fn ConsoleLine() -> Element {
     let mut instructions = use_signal(|| INFO_STR);
-    instructions.set(update_instructions());
     if !is_mobile() {
+        instructions.set(update_instructions());
         rsx! {
             div {
                 id: "console",
@@ -75,6 +75,7 @@ pub fn ConsoleLine() -> Element {
                     },
                 ">_" }
             }
+            Outlet::<Route> {}
         }
     }
 }
@@ -232,22 +233,19 @@ macro_rules! focus_console {
         use crate::console::{
             Color,
             style_console,
-            is_mobile,
         };
         
         let set_inactive = Closure::once(|| style_console(Some(Color::Grey), Some(Color::Grey)));
-        if !is_mobile() {
-            use_effect(move || {
-                let elem = window()
-                    .and_then(|win| win.document())
-                    .and_then(|doc| doc.get_element_by_id("console"))
-                    .and_then(|element| element.dyn_into::<HtmlElement>().ok());
-                if let Some(e) = elem {
-                    let _ = e.focus();
-                    let _ = e.add_event_listener_with_callback("blur", set_inactive.as_ref().unchecked_ref());
-                }}
-            );
-        }
+        use_effect(move || {
+            let elem = window()
+                .and_then(|win| win.document())
+                .and_then(|doc| doc.get_element_by_id("console"))
+                .and_then(|element| element.dyn_into::<HtmlElement>().ok());
+            if let Some(e) = elem {
+                let _ = e.focus();
+                let _ = e.add_event_listener_with_callback("blur", set_inactive.as_ref().unchecked_ref());
+            }}
+        );
     };
 }
 

@@ -122,17 +122,19 @@ a:visited:hover::after {
 
 #console-mobile {
   position: fixed;
-  bottom: 10vw;
-  right: 10vw;
+  bottom: 5vw;
+  right: 5vw;
 }
 
 #console-mobile button {
+  font-size: 14px;
   color: var(--text-color);
-  background-color: var(--accent-dg);
-  border: 2px solid var(--background-color);
+  background-color: var(--background-color);
+  border: 2px solid var(--text-color);
   border-radius: 5px;
   display: inline-block;
-  padding: 10px;
+  padding: 8px;
+  padding-top: 5px;
   cursor: pointer;
 }
 

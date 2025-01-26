@@ -7,9 +7,11 @@ pub fn Menu() -> Element {
     rsx! {
         div {
             id: "help",
-            p { "Navigate by entering page names into the console." }
-            p { span { class: "keypress", "TAB" } " can be used for completion"}
-            br {}
+            if !is_mobile() {
+                p { "Navigate by entering page names into the console." }
+                p { span { class: "keypress", "TAB" } " can be used for completion"}
+                br {}
+            }
             div {
                 id: "help-grid",
                 div {
