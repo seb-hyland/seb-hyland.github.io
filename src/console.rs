@@ -32,36 +32,50 @@ const EXTERN_PAGES: LazyLock<HashMap<&'static str, &'static str>> = LazyLock::ne
 pub fn ConsoleLine() -> Element {
     let mut instructions = use_signal(|| INFO_STR);
     instructions.set(update_instructions());
-    rsx! {
-        div {
-            id: "console",
-            tabindex: "0",
-            onkeydown: move |event| { 
-                event.prevent_default();
-                parse_keypress(&event.key()); 
-            },
-            onfocus: |_| {
-                style_console(Some(Color::White), Some(Color::White));
-            },
-            p {
-                class: "console-input",
-                "> {CONSOLE}█" 
-            }
-            p {
-                id: "instructions",
+    if !is_mobile() {
+        rsx! {
+            div {
+                id: "console",
+                tabindex: "0",
+                onkeydown: move |event| { 
+                    event.prevent_default();
+                    parse_keypress(&event.key()); 
+                },
+                onfocus: |_| {
+                    style_console(Some(Color::White), Some(Color::White));
+                },
                 p {
-                    if !instructions().0.is_empty() {
-                        span {
-                            class: "keypress",
-                            "{instructions().0}" 
+                    class: "console-input",
+                    "> {CONSOLE}█" 
+                }
+                p {
+                    id: "instructions",
+                    p {
+                        if !instructions().0.is_empty() {
+                            span {
+                                class: "keypress",
+                                "{instructions().0}" 
+                            }
                         }
+                        "{instructions().1}" 
+                        b { "{instructions().2}" } 
                     }
-                    "{instructions().1}" 
-                    b { "{instructions().2}" } 
                 }
             }
+            Outlet::<Route> {}
         }
-        Outlet::<Route> {}
+    } else {
+        rsx! {
+            div {
+                id: "console-mobile",
+                button { 
+                    onclick: |_| {
+                        let nav = navigator();
+                        nav.push(Route::Menu {});
+                    },
+                ">_" }
+            }
+        }
     }
 }
 
@@ -195,6 +209,14 @@ pub fn style_console(border_color: Option<Color>, text_color: Option<Color>) {
     }
 }
 
+pub fn is_mobile() -> bool {
+    window()
+        .and_then(|w| w.inner_width().ok())
+        .and_then(|jsv| jsv.as_f64())
+        .map(|v| v < 500.0)
+        .unwrap_or(false)
+}
+
 
 #[macro_export]
 macro_rules! focus_console {
@@ -210,19 +232,22 @@ macro_rules! focus_console {
         use crate::console::{
             Color,
             style_console,
+            is_mobile,
         };
         
         let set_inactive = Closure::once(|| style_console(Some(Color::Grey), Some(Color::Grey)));
-        use_effect(move || {
-            let elem = window()
-                .and_then(|win| win.document())
-                .and_then(|doc| doc.get_element_by_id("console"))
-                .and_then(|element| element.dyn_into::<HtmlElement>().ok());
-            if let Some(e) = elem {
-                let _ = e.focus();
-                let _ = e.add_event_listener_with_callback("blur", set_inactive.as_ref().unchecked_ref());
-            }}
-        );
+        if !is_mobile() {
+            use_effect(move || {
+                let elem = window()
+                    .and_then(|win| win.document())
+                    .and_then(|doc| doc.get_element_by_id("console"))
+                    .and_then(|element| element.dyn_into::<HtmlElement>().ok());
+                if let Some(e) = elem {
+                    let _ = e.focus();
+                    let _ = e.add_event_listener_with_callback("blur", set_inactive.as_ref().unchecked_ref());
+                }}
+            );
+        }
     };
 }
 

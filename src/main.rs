@@ -11,14 +11,14 @@ use crate::{
 #[rustfmt::skip]
 pub enum Route {
     #[layout(crate::console::ConsoleLine)]
-  #[route("/")]
-    Home {},
+    #[route("/")]
+        Home {},
     #[route("/menu")]
-    Menu {},
+        Menu {},
 }
 
 const MAIN_CSS: Asset = asset!("/assets/main.css");
-const FONT_API: &str = "https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap";
+const FONT_API: &str = "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap";
 
 fn main() {
     dioxus::launch(App);

@@ -1,16 +1,16 @@
 :root {
-    --background-color: #0f1116;
-    --text-color: white;
-    --accent-dg: #3C3D41;
-    --accent-lg: #666A6D;
-    --accent-blue: #368BC1;
-    --accent-foam: #9FE2BF;
-    --accent-red: #FF000D;
+  --background-color: #0f1116;
+  --text-color: white;
+  --accent-dg: #3C3D41;
+  --accent-lg: #666A6D;
+  --accent-blue: #368BC1;
+  --accent-foam: #9FE2BF;
+  --accent-red: #FF000D;
 }
 
 * {
-  font-family: "Space Mono", monospace;
-  font-weight: 500;
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 400;
   font-size: 16px;
 }
 
@@ -20,9 +20,11 @@ body {
   margin: 20px;
 }
 
+
 b {
   font-weight: 800;
 }
+
 
 a {
   text-decoration: none;
@@ -118,6 +120,23 @@ a:visited:hover::after {
   outline: none;
 }
 
+#console-mobile {
+  position: fixed;
+  bottom: 10vw;
+  right: 10vw;
+}
+
+#console-mobile button {
+  color: var(--text-color);
+  background-color: var(--accent-dg);
+  border: 2px solid var(--background-color);
+  border-radius: 5px;
+  display: inline-block;
+  padding: 10px;
+  cursor: pointer;
+}
+
+
 .keypress {
   color: var(--text-color);
   background-color: var(--accent-dg);
@@ -146,6 +165,6 @@ a:visited:hover::after {
 
 
 #help-grid p {
-  margin: -5px;
+  margin: -2.5px;
   padding: 0;
 }
