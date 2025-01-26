@@ -3,6 +3,13 @@ use std::{
     sync::LazyLock,
     collections::HashMap,
 };
+use web_sys::{
+    HtmlElement,
+    window,
+    wasm_bindgen::JsCast,
+};
+
+
 
 const CONSOLE: GlobalSignal<String> = Global::new(|| "".to_string());
 const INFO_STR: (&str, &str, &str) = ("", "To see all available pages, enter ", "menu");
@@ -19,6 +26,8 @@ const EXTERN_PAGES: LazyLock<HashMap<&'static str, &'static str>> = LazyLock::ne
     map
 });
 
+
+
 #[component]
 pub fn ConsoleLine() -> Element {
     let mut instructions = use_signal(|| INFO_STR);
@@ -30,6 +39,9 @@ pub fn ConsoleLine() -> Element {
             onkeydown: move |event| { 
                 event.prevent_default();
                 parse_keypress(&event.key()); 
+            },
+            onfocus: |_| {
+                style_console(Some(Color::White), Some(Color::White));
             },
             p {
                 style: "margin-left: 14px",
@@ -55,12 +67,7 @@ pub fn ConsoleLine() -> Element {
 
 
 fn parse_keypress(key: &Key) {
-    let _ = document::eval(
-        r#"
-            const console = document.getElementById("console");
-            console.style.borderColor = "var(--text-color)";
-        "#,
-    );
+    style_console(Some(Color::White), None);
     match key {
         Key::Enter => parse_command(),
         Key::Backspace => console_backspace(),
@@ -70,9 +77,11 @@ fn parse_keypress(key: &Key) {
     }
 }
 
+
 fn console_backspace() {
     CONSOLE.write().pop();
 }
+
 
 fn parse_command() {
     let cmd: &str = &CONSOLE();
@@ -83,14 +92,10 @@ fn parse_command() {
         new_tab(l);
     }
     else {
-        let _ = document::eval(
-            r#"
-                const console = document.getElementById("console");
-                console.style.borderColor = "var(--accent-red)";
-            "#,
-        );
+        style_console(Some(Color::Red), None);
     }
 }
+
 
 fn push_and_flush(target: &Route) {
     let nav = navigator();
@@ -100,7 +105,9 @@ fn push_and_flush(target: &Route) {
 
 
 fn new_tab(target: &str) {
-    document::eval(&format!(r#"window.open("{}", "_blank");"#, target));
+    if let Some(win) = window() {
+        let _ = win.open_with_url_and_target(target, "_blank");
+    }
     *CONSOLE.write() = "".to_string();
 }
 
@@ -136,45 +143,86 @@ fn complete() {
     if let Some(c) = completion {
         *CONSOLE.write() = c.to_string();
     } else {
-        let _ = document::eval(
-            r#"
-                const console = document.getElementById("console");
-                console.style.borderColor = "var(--accent-red)";
-            "#,
-        );
+        style_console(Some(Color::Red), None);
     }
 }
 
 
 fn completion_searcher<T>(map: &LazyLock<HashMap<&'static str, T>>, input: &str) -> Option<&'static str> {
-    map
-        .keys()
-        .filter(|cand| cand.starts_with(input))
-        .min_by_key(|cand| cand.len())
-        .copied() 
+    if input.is_empty() {
+        Some("home")
+    } else {
+        map
+            .keys()
+            .filter(|cand| cand.starts_with(input))
+            .min_by_key(|cand| cand.len())
+            .copied() 
+    }
 }
 
+
+pub enum Color {
+    White,
+    Grey,
+    Red
+}
+
+pub fn style_console(border_color: Option<Color>, text_color: Option<Color>) {
+    let style = window()
+        .and_then(|win| win.document())
+        .and_then(|doc| doc.get_element_by_id("console"))
+        .and_then(|element| element.dyn_into::<HtmlElement>().ok())
+        .map(|console| {
+            console.style()
+        });
+    let css_var = |c: Color| -> &'static str {
+        match c {
+            Color::White => "var(--text-color)",
+            Color::Grey => "var(--accent-lg)",
+            Color::Red => "var(--accent-red)",
+        }
+    };
+    
+    if let Some(s) = style {
+        if let Some(c) = border_color {
+            let color_var = css_var(c);
+            let _ = s.set_property("border-color", color_var);
+        }
+        if let Some(c) = text_color {
+            let color_var = css_var(c);
+            let _ = s.set_property("color", color_var);
+        }
+    }
+}
 
 
 #[macro_export]
 macro_rules! focus_console {
     () => {
+        use web_sys::{
+            HtmlElement,
+            window,
+            wasm_bindgen::{
+                JsCast,
+                closure::Closure,
+            },
+        };
+        use crate::console::{
+            Color,
+            style_console,
+        };
+        
+        let set_inactive = Closure::once(|| style_console(Some(Color::Grey), Some(Color::Grey)));
         use_effect(move || {
-            let _ = document::eval(
-                r#"
-                    const console = document.getElementById("console");
-                    console.focus();
-                    console.addEventListener("blur", () => {
-                        console.style.color = "var(--accent-lg)";
-                        console.style.borderColor = "var(--accent-lg)";
-                    });
-                    console.addEventListener("focus", () => {
-                        console.style.color = "var(--text-color)";
-                        console.style.borderColor = "var(--text-color)";
-                    });
-                "#,
-            );
-        });
+            let elem = window()
+                .and_then(|win| win.document())
+                .and_then(|doc| doc.get_element_by_id("console"))
+                .and_then(|element| element.dyn_into::<HtmlElement>().ok());
+            if let Some(e) = elem {
+                let _ = e.focus();
+                let _ = e.add_event_listener_with_callback("blur", set_inactive.as_ref().unchecked_ref());
+            }}
+        );
     };
 }
 

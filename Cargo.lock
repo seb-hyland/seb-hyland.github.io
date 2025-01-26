@@ -3487,6 +3487,7 @@ version = "0.1.0"
 dependencies = [
  "dioxus",
  "tracing",
+ "web-sys",
 ]
 
 [[package]]
