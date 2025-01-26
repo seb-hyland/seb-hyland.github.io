@@ -6,7 +6,7 @@ name = "seb-hyland"
 [web.app]
 
 # HTML title tag content
-title = "seb-hyland"
+title = "Sebastian Hyland"
 
 # include `assets` in web platform
 [web.resource]

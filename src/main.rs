@@ -11,7 +11,7 @@ use crate::{
 #[rustfmt::skip]
 pub enum Route {
     #[layout(crate::console::ConsoleLine)]
-    #[route("/")]
+  #[route("/")]
     Home {},
     #[route("/menu")]
     Menu {},
@@ -26,7 +26,15 @@ fn main() {
 #[component]
 fn App() -> Element {
     rsx! {
-        document::Link { rel: "stylesheet", href: MAIN_CSS }
+        document::Stylesheet { href: MAIN_CSS }
+        document::Style {
+            r#"
+                body {{
+                    background-color: #0f1116;
+                    color: #ffffff;
+                }}
+            "#
+        }
         Router::<Route> {}
     }
 }

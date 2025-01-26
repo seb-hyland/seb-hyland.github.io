@@ -7,16 +7,26 @@ pub fn Menu() -> Element {
     rsx! {
         div {
             id: "help",
-            p { "Navigate by entering page names into the console" }
+            p { "Navigate by entering page names into the console." }
+            p { span { class: "keypress", "TAB" } " can be used for completion"}
             br {}
-
-            p { "." }
-            p { "├─── " Link { to: Route::Home {}, "home" }}
-            p { "└─── " Link { to: Route::Menu {}, "menu" }}
-            br {}
-
-            p { "ext" }
-            p { "└─── " Link { to: "https://github.com/seb-hyland/", "github" }}
+            div {
+                id: "help-grid",
+                div {
+                    p { style: "margin-bottom: 5px;", "pages" }
+                    p { "│ "}
+                    p { "├─── " Link { to: Route::Home {}, "home" } }
+                    p { "│ "}
+                    p { "└─── " Link { to: Route::Menu {}, "menu" } }
+                    br {}
+                }
+                
+                div {
+                    p { style: "margin-bottom: 5px;", "external" }
+                    p { "│ "}
+                    p { "└─── " Link { to: "https://github.com/seb-hyland/", "github" } }
+                }
+            }
         }
     }
 }

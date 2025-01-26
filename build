@@ -3,4 +3,4 @@
 dx bundle --release
 rm -r docs
 mkdir docs
-mv target/dx/site/release/web/public/* docs/
+mv target/dx/seb-hyland/release/web/public/* docs/
