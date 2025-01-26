@@ -44,7 +44,7 @@ pub fn ConsoleLine() -> Element {
                 style_console(Some(Color::White), Some(Color::White));
             },
             p {
-                style: "margin-left: 14px",
+                class: "console-input",
                 "> {CONSOLE}█" 
             }
             p {

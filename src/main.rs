@@ -18,6 +18,7 @@ pub enum Route {
 }
 
 const MAIN_CSS: Asset = asset!("/assets/main.css");
+const FONT_API: &str = "https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap";
 
 fn main() {
     dioxus::launch(App);
@@ -35,6 +36,7 @@ fn App() -> Element {
                 }}
             "#
         }
+        document::Stylesheet { href: FONT_API }
         Router::<Route> {}
     }
 }
