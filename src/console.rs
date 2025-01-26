@@ -15,6 +15,7 @@ const INTERN_PAGES: LazyLock<HashMap<&'static str, Route>> = LazyLock::new(|| {
 const EXTERN_PAGES: LazyLock<HashMap<&'static str, &'static str>> = LazyLock::new(|| {
     let mut map = HashMap::new();
     map.insert("github", "https://github.com/seb-hyland/");
+    map.insert("source", "https://github.com/seb-hyland/seb-hyland.github.io");
     map
 });
 

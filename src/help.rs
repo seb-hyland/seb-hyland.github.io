@@ -24,7 +24,9 @@ pub fn Menu() -> Element {
                 div {
                     p { style: "margin-bottom: 5px;", "external" }
                     p { "│ "}
-                    p { "└─── " Link { to: "https://github.com/seb-hyland/", "github" } }
+                    p { "├─── " Link { to: "https://github.com/seb-hyland/", "github" } }
+                    p { "│ "}
+                    p { "└─── " Link { to: "https://github.com/seb-hyland/seb-hyland.github.io", "source" } }
                 }
             }
         }
