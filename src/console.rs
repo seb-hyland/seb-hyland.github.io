@@ -212,9 +212,9 @@ pub fn style_console(border_color: Option<Color>, text_color: Option<Color>) {
 
 pub fn is_mobile() -> bool {
     window()
-        .and_then(|w| w.inner_width().ok())
-        .and_then(|jsv| jsv.as_f64())
-        .map(|v| v < 500.0)
+        .map(|w| w.navigator())
+        .and_then(|n| n.platform().ok())
+        .map(|p| !p.contains("Linux") && !p.contains("Mac") && !p.contains("Win"))
         .unwrap_or(false)
 }
 

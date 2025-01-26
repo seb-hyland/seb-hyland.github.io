@@ -44,6 +44,10 @@ fn App() -> Element {
 #[component]
 pub fn Home() -> Element {
     focus_console!();
+    let detected_platform = web_sys::window()
+        .map(|w| w.navigator())
+        .and_then(|n| n.platform().ok())
+        .unwrap_or("".to_string());
     rsx! {
         div {
             id: "hero",
@@ -57,7 +61,8 @@ pub fn Home() -> Element {
                     li { "Distributed compute" }
                     li { "Optimization" }
                 }
-                p { "This site is currently under construction."}
+                p { "This site is currently under construction." }
+                p { "Detected platform: " b { "{detected_platform}" } }
             }
         }
     }

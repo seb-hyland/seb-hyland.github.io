@@ -9,7 +9,7 @@ edition = "2021"
 [dependencies]
 dioxus = { version = "0.6.1", features = ["router"] }
 tracing = "0.1.41"
-web-sys = { version = "0.3.77", features = ["CssStyleDeclaration"] }
+web-sys = { version = "0.3.77", features = ["CssStyleDeclaration", "Navigator"] }
 
 [features]
 default = ["web"]
