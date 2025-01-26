@@ -214,7 +214,7 @@ pub fn is_mobile() -> bool {
     window()
         .map(|w| w.navigator())
         .and_then(|n| n.platform().ok())
-        .map(|p| !p.contains("Linux") && !p.contains("Mac") && !p.contains("Win"))
+        .map(|p| !p.contains("Linux") && !p.contains("Mac") && !p.contains("Win") && !p.contains("FreeBSD"))
         .unwrap_or(false)
 }
 

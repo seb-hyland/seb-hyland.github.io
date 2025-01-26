@@ -58,8 +58,8 @@ pub fn Home() -> Element {
                 ul {
                     li { "Bioinformatics" }
                     li { "Embedded systems/firmware" }
+                    li { "DST for biological modelling" }
                     li { "Distributed compute" }
-                    li { "Optimization" }
                 }
                 p { "This site is currently under construction." }
                 p { "Detected platform: " b { "{detected_platform}" } }
